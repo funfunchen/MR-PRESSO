@@ -11,14 +11,14 @@ if(length(BetaExposure) != length(SdExposure))
 stop("BetaExposure and SdExposure must have the same number of elements")
 
 # Functions
-"%^%" <- function(x, n) with(eigen(x), vectors %*% (values^n * t(vectors)))
+"%^%" <- function(x, n) with(eigen(x), vectors %*% (values^n * t(vectors))) ### cal 'n'th power of matrix 'x' 
 
 getRSS_LOO <- function(BetaOutcome, BetaExposure, data, returnIV){
 dataW <- data[, c(BetaOutcome, BetaExposure)] * sqrt(data[, "Weights"])
 X <- as.matrix(dataW[ , BetaExposure])
 Y <- as.matrix(dataW[ , BetaOutcome])
 CausalEstimate_LOO <- sapply(1:nrow(dataW), function(i) {
-(t(X[-i, ]) %*% X[-i, ])%^%(-1) %*% t(X[-i, ]) %*% Y[-i, ]
+(t(X[-i, ]) %*% X[-i, ])%^%(-1) %*% t(X[-i, ]) %*% Y[-i, ] ## equal solve(t(X)%*%X) %*% t(X) %*% Y, which is beta
 })
 
 if(length(BetaExposure) == 1)
